@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Science - Choose Class</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+    body {
+        margin: 0;
+        background: radial-gradient(circle at top, #1a1a3c, #080812 70%);
+        font-family: "Segoe UI", sans-serif;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    /* Header using SAME home-page logo */
+    .header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 20px 40px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .logo-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #ff6b6b, #feca57);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+        animation: logoSpin 4s ease-in-out infinite;
+    }
+
+    @keyframes logoSpin {
+        0%, 100% { transform: rotate(0deg) scale(1); }
+        50% { transform: rotate(360deg) scale(1.1); }
+    }
+
+    .logo-text {
+        font-size: 32px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ff6b6b, #feca57, #4ecdc4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Main card */
+    .card {
+        width: 380px;
+        margin: auto;
+        background: rgba(255,255,255,0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 18px;
+        padding: 30px 30px 40px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        text-align: center;
+        border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .card img {
+        width: 50px;
+    }
+
+    select {
+        width: 100%;
+        padding: 12px;
+        margin-top: 20px;
+        border-radius: 10px;
+        border: none;
+        font-size: 15px;
+    }
+
+    .btn {
+        margin-top: 25px;
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        background: linear-gradient(45deg, #ff6b6b, #feca57);
+        color: white;
+        font-size: 16px;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- Top Header - SAME AS HOME PAGE -->
+<div class="header">
+    <a href="home.html" style="text-decoration:none; display:flex; align-items:center; gap:15px;">
+        <div class="logo-icon">🎮</div>
+        <div class="logo-text">LearnQuest</div>
+    </a>
+</div>
+
+<!-- Main Card -->
+<div class="card">
+    <img src="https://cdn-icons-png.flaticon.com/512/906/906324.png">
+    <h2 style="margin-top:10px;">Science</h2>
+    <p style="opacity:0.8; margin-top:-5px;">Select your class</p>
+
+    <select id="classSelect">
+        <option value="">-- Choose Class --</option>
+        <option value="6">Class 6</option>
+        <option value="7">Class 7</option>
+        <option value="8">Class 8</option>
+        <option value="9">Class 9</option>
+        <option value="10">Class 10</option>
+        <option value="11">Class 11</option>
+        <option value="12">Class 12</option>
+    </select>
+
+    <button class="btn" onclick="goNext()">Continue</button>
+</div>
+
+<script>
+function goNext() {
+    const cls = document.getElementById("classSelect").value;
+
+    if (!cls) {
+        alert("Please select a class.");
+        return;
+    }
+
+    window.location.href = `games_list.html?subject=science&class=${cls}`;
+}
+</script>
+
+</body>
+</html>

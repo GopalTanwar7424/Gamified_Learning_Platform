@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnQuest - Gamified Learning Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            background: #0f0c29;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .floating-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.3;
+            animation: float 20s infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            background: #ff6b6b;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 250px;
+            height: 250px;
+            background: #4ecdc4;
+            top: 60%;
+            right: 10%;
+            animation-delay: 3s;
+        }
+
+        .shape:nth-child(3) {
+            width: 200px;
+            height: 200px;
+            background: #ffe66d;
+            bottom: 10%;
+            left: 50%;
+            animation-delay: 6s;
+        }
+
+        .shape:nth-child(4) {
+            width: 280px;
+            height: 280px;
+            background: #a8e6cf;
+            top: 30%;
+            right: 30%;
+            animation-delay: 9s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, 50px) rotate(90deg); }
+            50% { transform: translate(0, 100px) rotate(180deg); }
+            75% { transform: translate(-50px, 50px) rotate(270deg); }
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+            animation: logoSpin 4s ease-in-out infinite;
+        }
+
+        @keyframes logoSpin {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(360deg) scale(1.1); }
+        }
+
+        .logo h1 {
+            font-size: 32px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b6b, #feca57);
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::before {
+            width: 100%;
+        }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 100px 50px;
+            min-height: 90vh;
+            color: white;
+            position: relative;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 650px;
+            animation: slideInLeft 1s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hero h2 {
+            font-size: 68px;
+            margin-bottom: 25px;
+            line-height: 1.2;
+            background: linear-gradient(135deg, #ffffff, #feca57, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+        }
+
+        .hero p {
+            font-size: 22px;
+            margin-bottom: 40px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 18px 45px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px;
+            transition: all 0.4s;
+            cursor: pointer;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #ff9a56, #ffca6f, #ff9a56);
+            background-size: 200% 100%;
+            color: white;
+            box-shadow: 0 10px 30px rgba(255, 154, 86, 0.5);
+            position: relative;
+            z-index: 1;
+            animation: buttonGlow 3s ease infinite;
+        }
+
+        @keyframes buttonGlow {
+            0%, 100% {
+                background-position: 0% 50%;
+                box-shadow: 0 10px 30px rgba(255, 154, 86, 0.5);
+            }
+            50% {
+                background-position: 100% 50%;
+                box-shadow: 0 10px 40px rgba(255, 202, 111, 0.7);
+            }
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-8px) scale(1.08);
+            box-shadow: 0 20px 50px rgba(255, 154, 86, 0.8);
+            animation: buttonPulse 0.5s ease;
+        }
+
+        @keyframes buttonPulse {
+            0%, 100% { transform: translateY(-8px) scale(1.08); }
+            50% { transform: translateY(-8px) scale(1.12); }
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-secondary::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -50%; }
+            100% { left: 150%; }
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #0f0c29;
+            transform: translateY(-8px) scale(1.05);
+            border-color: white;
+        }
+
+        .hero-visual {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: slideInRight 1s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .subject-orbit {
+            position: relative;
+            width: 450px;
+            height: 450px;
+        }
+
+        .center-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 140px;
+            height: 140px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            box-shadow: 0 0 50px rgba(255, 107, 107, 0.6);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .orbit-card {
+            position: absolute;
+            width: 110px;
+            height: 110px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            animation: orbit 20s linear infinite;
+        }
+
+        .orbit-card:nth-child(2) { animation-delay: 0s; top: 0; left: 50%; transform: translateX(-50%); }
+        .orbit-card:nth-child(3) { animation-delay: -2.5s; top: 15%; right: 5%; }
+        .orbit-card:nth-child(4) { animation-delay: -5s; top: 50%; right: 0; transform: translateY(-50%); }
+        .orbit-card:nth-child(5) { animation-delay: -7.5s; bottom: 15%; right: 5%; }
+        .orbit-card:nth-child(6) { animation-delay: -10s; bottom: 0; left: 50%; transform: translateX(-50%); }
+        .orbit-card:nth-child(7) { animation-delay: -12.5s; bottom: 15%; left: 5%; }
+        .orbit-card:nth-child(8) { animation-delay: -15s; top: 50%; left: 0; transform: translateY(-50%); }
+        .orbit-card:nth-child(9) { animation-delay: -17.5s; top: 15%; left: 5%; }
+
+        @keyframes orbit {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(10px, -10px) rotate(180deg); }
+        }
+
+        .orbit-icon {
+            font-size: 40px;
+            margin-bottom: 5px;
+        }
+
+        .orbit-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+            text-align: center;
+        }
+
+        .features {
+            background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.05));
+            padding: 100px 50px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 52px;
+            color: white;
+            margin-bottom: 20px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 70px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(78, 205, 196, 0.1));
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 45px;
+            border-radius: 25px;
+            text-align: center;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+        .feature-card:nth-child(5) { animation-delay: 0.5s; }
+        .feature-card:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(78, 205, 196, 0.2));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 10%, transparent 10%);
+            background-size: 20px 20px;
+            animation: particleMove 20s linear infinite;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        @keyframes particleMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover::after {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px) scale(1.02) rotateZ(2deg);
+            box-shadow: 0 20px 50px rgba(255, 107, 107, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 70px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+            animation: iconBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .feature-card:hover .feature-icon {
+            animation: iconSpin 0.6s ease;
+        }
+
+        @keyframes iconSpin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .feature-card h3 {
+            font-size: 26px;
+            color: white;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card p {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        .subjects {
+            padding: 100px 50px;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 35px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .subject-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 40px 25px;
+            border-radius: 25px;
+            text-align: center;
+            transition: all 0.4s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            animation: popIn 0.6s ease forwards;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .subject-card:nth-child(1) { animation-delay: 0.1s; }
+        .subject-card:nth-child(2) { animation-delay: 0.15s; }
+        .subject-card:nth-child(3) { animation-delay: 0.2s; }
+        .subject-card:nth-child(4) { animation-delay: 0.25s; }
+        .subject-card:nth-child(5) { animation-delay: 0.3s; }
+        .subject-card:nth-child(6) { animation-delay: 0.35s; }
+        .subject-card:nth-child(7) { animation-delay: 0.4s; }
+        .subject-card:nth-child(8) { animation-delay: 0.45s; }
+        .subject-card:nth-child(9) { animation-delay: 0.5s; }
+        .subject-card:nth-child(10) { animation-delay: 0.55s; }
+        .subject-card:nth-child(11) { animation-delay: 0.6s; }
+        .subject-card:nth-child(12) { animation-delay: 0.65s; }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) rotate(-10deg);
+            }
+            60% {
+                opacity: 1;
+                transform: scale(1.1) rotate(5deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        .subject-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+        }
+
+        .subject-card:hover::after {
+            left: 100%;
+        }
+
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 25px;
+            padding: 2px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57, #4ecdc4);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .subject-card:hover::before {
+            opacity: 1;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-15px) scale(1.08) rotate(3deg);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .subject-icon {
+            font-size: 55px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-8px) rotate(-5deg); }
+            50% { transform: translateY(0px) rotate(0deg); }
+            75% { transform: translateY(-8px) rotate(5deg); }
+        }
+
+        .subject-card:hover .subject-icon {
+            animation: iconExcited 0.5s ease infinite;
+        }
+
+        @keyframes iconExcited {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.2) rotate(-10deg); }
+            75% { transform: scale(1.2) rotate(10deg); }
+        }
+
+        .subject-card h3 {
+            font-size: 22px;
+            color: white;
+            margin-bottom: 12px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .subject-card p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats {
+            padding: 100px 50px;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(78, 205, 196, 0.1));
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 50px;
+            max-width: 1100px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 25px;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 107, 107, 0.3), transparent);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .stat-item:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .stat-item:hover {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 20px 50px rgba(255, 107, 107, 0.5);
+        }
+
+        .stat-item h3 {
+            font-size: 58px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+            position: relative;
+            z-index: 1;
+            animation: numberCount 2s ease-out;
+        }
+
+        @keyframes numberCount {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .stat-item p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+        }
+
+        .cta-section {
+            padding: 120px 50px;
+            text-align: center;
+            color: white;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(78, 205, 196, 0.2));
+        }
+
+        .cta-section h2 {
+            font-size: 52px;
+            margin-bottom: 25px;
+            font-weight: 800;
+        }
+
+        .cta-section p {
+            font-size: 22px;
+            margin-bottom: 50px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 50px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #feca57;
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                flex-direction: column;
+                padding: 60px 20px;
+                text-align: center;
+            }
+
+            .hero h2 {
+                font-size: 42px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .subject-orbit {
+                width: 350px;
+                height: 350px;
+                margin-top: 50px;
+            }
+
+            .features, .subjects, .stats, .cta-section {
+                padding: 60px 20px;
+            }
+
+            .section-title {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">🎮</div>
+            <h1>LearnQuest</h1>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#subjects">Subjects</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h2>Learn Through Play</h2>
+            <p>Transform your education journey with India's most engaging gamified learning platform. Master every subject from Math to Arts with interactive games, challenges, and rewards!</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">Start Learning Free</a>
+                <a href="#" class="btn btn-secondary">Explore Games</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="subject-orbit">
+                <div class="center-circle">🎓</div>
+                <div class="orbit-card">
+                    <div class="orbit-icon">🧮</div>
+                    <div class="orbit-label">Math</div>
+                </div>
+                <div class="orbit-card">
+                    <div class="orbit-icon">🔬</div>
+                    <div class="orbit-label">Science</div>
+                </div>
+                <div class="orbit-card">
+                    <div class="orbit-icon">🌍</div>
+                    <div class="orbit-label">Geography</div>
+                </div>
+                <div class="orbit-card">
+                    <div class="orbit-icon">📚</div>
+                    <div class="orbit-label">History</div>
+                </div>
+                <div class="orbit-card">
+                    <div class="orbit-icon">🗣️</div>
+                    <div class="orbit-label">English</div>
+                </div>
+                <div class="orbit-card">
+                    <div class="orbit-icon">🕉️</div>
+                    <div class="orbit-label">Hindi</div>
+                </div>
+                <div class="orbit-card">
+                    <div class="orbit-icon">💻</div>
+                    <div class="orbit-label">Computer</div>
+                </div>
+                <div class="orbit-card">
+                    <div class="orbit-icon">🎨</div>
+                    <div class="orbit-label">Arts</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <h2 class="section-title">Why Choose LearnQuest?</h2>
+        <p class="section-subtitle">Designed for rural India with cutting-edge gamification</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Gamified Learning</h3>
+                <p>Turn every lesson into an exciting adventure with interactive games, quests, and challenges that make learning addictive!</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>Multilingual</h3>
+                <p>Learn in Hindi, English, and regional languages. No language barrier can stop your education!</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📴</div>
+                <h3>Offline Mode</h3>
+                <p>Download content and learn anywhere, anytime. Internet? Not required! Perfect for rural areas.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Smart Analytics</h3>
+                <p>Teachers get detailed insights on student progress, weak areas, and personalized recommendations.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Works Everywhere</h3>
+                <p>Optimized for low-cost smartphones and tablets. Quality education shouldn't need expensive devices!</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Rewards & Badges</h3>
+                <p>Earn badges, unlock achievements, climb leaderboards! Compete with friends and stay motivated.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="subjects" id="subjects">
+    <h2 class="section-title">STEM Subjects</h2>
+    <p class="section-subtitle">Choose a subject to continue</p>
+
+    <div class="subjects-grid">
+
+        <a href="science.html" class="subject-card">
+            <div class="subject-icon">🔬</div>
+            <h3>Science</h3>
+            <p>Physics, Chemistry, Biology</p>
+        </a>
+
+        <a href="technology.html" class="subject-card">
+            <div class="subject-icon">💻</div>
+            <h3>Technology</h3>
+            <p>Coding, IT, Digital Skills</p>
+        </a>
+
+        <a href="engineering.html" class="subject-card">
+            <div class="subject-icon">⚙️</div>
+            <h3>Engineering</h3>
+            <p>Design, Mechanics, Innovation</p>
+        </a>
+
+        <a href="mathematics.html" class="subject-card">
+            <div class="subject-icon">🧮</div>
+            <h3>Mathematics</h3>
+            <p>Algebra, Geometry, Calculus</p>
+        </a>
+
+    </div>
+</section>
+
+
+    <section class="stats">
+        <h2 class="section-title">Our Amazing Impact</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3>15%+</h3>
+                <p>Engagement Boost</p>
+            </div>
+            <div class="stat-item">
+                <h3>10K+</h3>
+                <p>Happy Students</p>
+            </div>
+            <div class="stat-item">
+                <h3>500+</h3>
+                <p>Rural Schools</p>
+            </div>
+            <div class="stat-item">
+                <h3>100+</h3>
+                <p>Fun Games</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Ready to Level Up Your Learning?</h2>
+        <p>Join thousands of students transforming education through games!</p>
+        <div class="cta-buttons" style="justify-content: center;">
+            <a href="#" class="btn btn-primary">Get Started Now</a>
+            <a href="#" class="btn btn-secondary">Watch Demo Video</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#">

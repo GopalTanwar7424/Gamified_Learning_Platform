@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Games List</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+    body {
+        margin: 0;
+        background: radial-gradient(circle at top, #1a1a3c, #080812 70%);
+        font-family: 'Segoe UI', sans-serif;
+        color: white;
+        overflow-x: hidden;
+    }
+
+    .particle {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.4);
+        animation: floatUp 10s infinite linear;
+    }
+    @keyframes floatUp {
+        from { transform: translateY(100vh); opacity: 0; }
+        to { transform: translateY(-10vh); opacity: 1; }
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 50px 30px;
+        position: relative;
+        z-index: 5;
+        animation: fadeIn 1.4s ease;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-title {
+        font-size: 46px;
+        font-weight: bold;
+        background: linear-gradient(135deg, #ff6b6b, #feca57);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+        font-size: 18px;
+        opacity: .8;
+        margin-bottom: 40px;
+    }
+
+    .games-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 32px;
+        margin-bottom: 50px;
+    }
+
+    .game-card {
+        background: rgba(255,255,255,0.05);
+        border-radius: 18px;
+        padding: 25px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.12);
+        cursor: pointer;
+        position: relative;
+        text-decoration: none;
+        color: white;
+
+        transform-style: preserve-3d;
+        transition: transform .3s ease, box-shadow .3s ease;
+    }
+
+    .game-card::after {
+        content: "";
+        position: absolute;
+        top: -80%;
+        left: -80%;
+        width: 250%;
+        height: 250%;
+        background: linear-gradient(120deg, rgba(255,255,255,0.15), transparent 70%);
+        transform: rotate(25deg);
+        transition: .35s ease;
+        opacity: 0;
+    }
+
+    .game-card:hover {
+        transform: translateY(-12px) scale(1.05) rotateX(6deg);
+        box-shadow: 0 20px 45px rgba(0,0,0,0.6);
+    }
+
+    .game-card:hover::after {
+        opacity: 1;
+        transform: rotate(25deg) translateY(-20%);
+    }
+
+    .icon-circle {
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.1);
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255,255,255,0.2);
+        transition: .3s ease;
+    }
+
+    .game-card:hover .icon-circle {
+        background: rgba(255,255,255,0.2);
+        transform: scale(1.15);
+    }
+
+    .icon-circle img {
+        width: 38px;
+        height: 38px;
+    }
+
+    .game-title {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    .game-desc {
+        font-size: 14px;
+        opacity: .8;
+    }
+</style>
+</head>
+
+<body>
+
+<div id="particles"></div>
+
+<div class="container">
+
+    <!-- Removed Back to Home button -->
+
+    <h1 id="pageTitle" class="page-title"></h1>
+    <p id="pageSub" class="subtitle"></p>
+
+    <div class="games-grid" id="gamesGrid"></div>
+
+</div>
+
+<script>
+for (let i = 0; i < 35; i++) {
+    let p = document.createElement("div");
+    p.className = "particle";
+    p.style.left = Math.random()*100 + "vw";
+    p.style.animationDuration = (6 + Math.random()*6) + "s";
+    p.style.opacity = Math.random();
+    document.body.appendChild(p);
+}
+
+const ICONS = {
+    physics: "https://cdn-icons-png.flaticon.com/512/3062/3062634.png",
+    chemistry: "https://cdn-icons-png.flaticon.com/512/3075/3075977.png",
+    human: "https://cdn-icons-png.flaticon.com/512/4320/4320389.png",
+    ecology: "https://cdn-icons-png.flaticon.com/512/2903/2903271.png",
+    space: "https://cdn-icons-png.flaticon.com/512/3212/3212608.png",
+
+    coding: "https://cdn-icons-png.flaticon.com/512/906/906324.png",
+    binary: "https://cdn-icons-png.flaticon.com/512/2103/2103665.png",
+    logic: "https://cdn-icons-png.flaticon.com/512/3075/3075973.png",
+    algorithm: "https://cdn-icons-png.flaticon.com/512/2721/2721048.png",
+    files: "https://cdn-icons-png.flaticon.com/512/318/318477.png",
+
+    bridge: "https://cdn-icons-png.flaticon.com/512/4712/4712177.png",
+    machine: "https://cdn-icons-png.flaticon.com/512/3898/3898085.png",
+    circuit: "https://cdn-icons-png.flaticon.com/512/8500/8500589.png",
+    hydraulic: "https://cdn-icons-png.flaticon.com/512/6491/6491732.png",
+    robot: "https://cdn-icons-png.flaticon.com/512/4712/4712074.png",
+
+    algebra: "https://cdn-icons-png.flaticon.com/512/3233/3233041.png",
+    geometry: "https://cdn-icons-png.flaticon.com/512/3254/3254950.png",
+    fraction: "https://cdn-icons-png.flaticon.com/512/869/869463.png",
+    trig: "https://cdn-icons-png.flaticon.com/512/6165/6165798.png",
+    probability: "https://cdn-icons-png.flaticon.com/512/10613/10613410.png"
+};
+
+const GAMES = {
+    science: [
+      ["Physics Motion Simulator", ICONS.physics, "Simulate motion, forces and learn kinematics."],
+      ["Chemistry Reaction Matcher", ICONS.chemistry, "Match reagents and see reaction outcomes."],
+      ["Human Body Builder", ICONS.human, "Assemble body systems and learn functions."],
+      ["Ecology Food Chain Puzzle", ICONS.ecology, "Build food chains and ecosystems."],
+      ["Space Explorer", ICONS.space, "Explore planets & orbital mechanics."]
+    ],
+
+    technology: [
+      ["Coding Maze Runner", ICONS.coding, "Solve puzzles using programming logic."],
+      ["Binary Decoder", ICONS.binary, "Translate binary to solve riddles."],
+      ["Logic Gate Puzzle", ICONS.logic, "Build logic circuits to meet outputs."],
+      ["Algorithm Builder", ICONS.algorithm, "Create algorithms to complete tasks."],
+      ["File System Adventure", ICONS.files, "Navigate directories to find clues."]
+    ],
+
+    engineering: [
+      ["Bridge Builder", ICONS.bridge, "Design and test strong bridges."],
+      ["Simple Machine Factory", ICONS.machine, "Assemble levers, pulleys, ramps."],
+      ["Circuit Connection Lab", ICONS.circuit, "Connect circuits to light bulbs."],
+      ["Hydraulic Pressure Puzzle", ICONS.hydraulic, "Use fluids to move weights."],
+      ["Design-a-Robot", ICONS.robot, "Assemble robot parts for missions."]
+    ],
+
+    mathematics: [
+      ["Algebra Escape Room", ICONS.algebra, "Use algebraic clues to escape."],
+      ["Coordinate Geometry Runner", ICONS.geometry, "Navigate using slopes & coords."],
+      ["Fraction Pizza Chef", ICONS.fraction, "Solve pizzas using fractions."],
+      ["Trigonometry Shooter", ICONS.trig, "Use trig to hit targets."],
+      ["Probability Treasure Game", ICONS.probability, "Use probability to find treasure."]
+    ]
+};
+
+function getParams() {
+    const p = {};
+    new URLSearchParams(window.location.search).forEach((v, k) => p[k] = v);
+    return p;
+}
+const params = getParams();
+const subject = params.subject.toLowerCase();
+const cls = params.class;
+
+document.getElementById("pageTitle").innerText =
+    `${subject.charAt(0).toUpperCase()+subject.slice(1)} — Class ${cls}`;
+
+document.getElementById("pageSub").innerText =
+    `Games for ${subject.charAt(0).toUpperCase()+subject.slice(1)} (Class ${cls})`;
+
+const grid = document.getElementById("gamesGrid");
+
+GAMES[subject].forEach(([name, icon, desc]) => {
+    const card = document.createElement("a");
+    card.className = "game-card";
+
+    card.href = `game/game.html?subject=${subject}&class=${cls}&game=${name}`;
+
+    card.innerHTML = `
+        <div class="icon-circle">
+            <img src="${icon}">
+        </div>
+        <div class="game-title">${name}</div>
+        <div class="game-desc">${desc}</div>
+    `;
+
+    card.addEventListener("mousemove", e => {
+        const rect = card.getBoundingClientRect();
+        let x = e.clientX - rect.left;
+        let y = e.clientY - rect.top;
+        let centerX = rect.width / 2;
+        let centerY = rect.height / 2;
+        let rotateX = ((y - centerY) / 20);
+        let rotateY = -((x - centerX) / 20);
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+    });
+
+    card.addEventListener("mouseleave", () => {
+        card.style.transform = "rotateX(0) rotateY(0) scale(1)";
+    });
+
+    grid.appendChild(card);
+});
+</script>
+
+</body>
+</html>
