@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Game</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+    body {
+        background: #0c0c24;
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 40px 20px;
+        color: white;
+    }
+
+    .breadcrumb {
+        font-size: 15px;
+        margin-bottom: 15px;
+    }
+    .breadcrumb a {
+        color: #ffca6f;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .page-box {
+        background: rgba(255,255,255,0.05);
+        border-radius: 14px;
+        padding: 30px;
+        max-width: 900px;
+        margin: auto;
+        border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    h1 {
+        font-size: 32px;
+        margin-bottom: 8px;
+    }
+
+    .sub {
+        opacity: .8;
+        margin-bottom: 25px;
+    }
+
+    .game-area {
+        background: rgba(255,255,255,0.06);
+        border-radius: 14px;
+        padding: 40px;
+        text-align: center;
+        border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .demo-btn {
+        padding: 10px 22px;
+        background: #ffca57;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        margin-top: 25px;
+        font-weight: 600;
+    }
+
+    .back-btn {
+        margin-top: 30px;
+        display: inline-block;
+        padding: 10px 18px;
+        background: #ff6b6b;
+        border-radius: 8px;
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+</style>
+</head>
+
+<body>
+
+<div class="breadcrumb" id="breadcrumb"></div>
+
+<div class="page-box">
+
+    <h1 id="gameTitle"></h1>
+    <div class="sub" id="subjectClass"></div>
+
+    <div class="game-area">
+        <p id="placeholder"></p>
+        <button class="demo-btn">Start Demo</button>
+    </div>
+
+    <a id="backBtn" class="back-btn">Back to games</a>
+</div>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const subject = params.get("subject");
+    const cls = params.get("class");
+    const game = params.get("game");
+
+    const prettySubject = subject.charAt(0).toUpperCase() + subject.slice(1);
+
+    document.getElementById("gameTitle").innerText = game;
+
+    document.getElementById("subjectClass").innerText = `${prettySubject} — Class ${cls}`;
+
+    document.getElementById("placeholder").innerHTML =
+        `This is the placeholder for <b>${game}</b> — build or embed the real game here.`;
+
+    document.getElementById("breadcrumb").innerHTML =
+        `<a href="/home.html">Home</a> › 
+         <a href="/games_list.html?subject=${subject}&class=${cls}">${prettySubject}</a> › 
+         Class ${cls} › 
+         ${game}`;
+
+    document.getElementById("backBtn").href =
+        `/games_list.html?subject=${subject}&class=${cls}`;
+</script>
+
+</body>
+</html>
