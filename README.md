@@ -1,5 +1,7 @@
+## Project Structure
+
+```plaintext
 NEW-GAMIFIED-PROJECT/
-│
 ├── game/
 │   ├── game.html
 │   └── desktop.ini
